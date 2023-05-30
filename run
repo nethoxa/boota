@@ -1,0 +1,32 @@
+#!/bin/bash
+
+read -p "¿Compilar y ejecutar o sólo compilar? (1/2) -> " modo
+
+if [ "$modo" == "1" ]; then
+    echo "Compilando..."
+    cd src
+    make
+    echo "Listo, ejecutando..."
+    make run
+    echo "Voy a limpiar, borra la línea 12 si no quieres que borre los .o y .bin"
+    make clean
+    cd ..
+
+
+elif [ "$modo" == "2" ]; then
+    cd src
+    if ! ls | grep os-image.bin; then
+        echo "No hay archivo, abortando..."
+        exit -1
+
+    else
+        make
+        cd ..
+
+    fi
+
+else
+    echo "Hazme caso (-> -_-)->"
+    exit -1
+
+fi
