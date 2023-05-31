@@ -1,26 +1,30 @@
 # BOOTA
+It's a joke between boot in English and 'bota' in Spanish (which is a type of shoe)... asghdfajsdfgahsdf
 
 ## Index
-- [KERNEL (quería llamarlo BOOTA, yqs)](#kernel-quería-llamarlo-boota-yqs)
+- [BOOTA](#boota)
   - [Index](#index)
   - [Layout](#layout)
-  - [Comandos](#comandos)
-  - [NOTA](#nota)
-  - [Descripción](#descripción)
+  - [Video](#video)
+  - [Comands](#comands)
+  - [Description](#description)
 
 ## Layout
-- `src` --- donde están los archivos
-  - `boot` --- el bootloader
-  - `cpu` --- tema de interrupciones y comunicación drivers con CPU
-  - `kernel` --- el kernel
-  - `libc` --- librerías de C (memoria con memcpy y demás, y strings con strcmp & company)
-  - `Makefile` --- Makefile de siempre
-- `video` --- el POC
-- `os-dev.pdf` --- de donde se ha sacado el 90%
-- `README` --- este archivo
-- `run` --- el programa para compilar y ejecutar (úsalo, hazme caso)
+- `src` --- kernel source file
+  - `boot` --- bootloader
+  - `cpu` --- interruptions and drivers
+  - `kernel` --- kernel
+  - `libc` --- C libraries
+  - `Makefile` --- Makefile
+- `video` --- POC
+- `os-dev.pdf` --- MUST-READ
+- `README` --- this file
+- `run` --- use it, really
 
-## Comandos
+## Video
+https://github.com/erebus-eth/boota/assets/135072738/df9effd2-b2ea-46f6-a49f-0aa3e618b928
+
+## Comands
 El kernel implementa los siguientes comandos:
 
 - HELP -> muestra un mensaje con la funcionalidad de cada comando
@@ -32,7 +36,7 @@ El kernel implementa los siguientes comandos:
 
 En caso de meter algo que no esté permitido, devolverá el input del usuario por pantalla. Hay un [run](run) que automatiza todo, desde compilar hasta ejecutar. Si no quieres que elimine los archivos después de ejecutar, borra la línea 12 del archivo o dale a la opción 2.
 
-## Descripción
+## Description
 Primero, empezamos definiendo una serie de [funciones](/src/boot/real/print.asm) para imprimir por pantalla en modo real:
 
 - `print_rm` es cout en la consola usando tty
