@@ -1,14 +1,14 @@
 #!/bin/bash
 
-read -p "¿Compilar y ejecutar o sólo compilar? (1/2) -> " modo
+read -p "Compile and run or just run (1/2) -> " modo
 
 if [ "$modo" == "1" ]; then
-    echo "Compilando..."
+    echo "Compiling..."
     cd src
     make
-    echo "Listo, ejecutando..."
+    echo "Finished, running..."
     make run
-    echo "Voy a limpiar, borra la línea 12 si no quieres que borre los .o y .bin"
+    echo "Cleaning..."
     make clean
     cd ..
 
@@ -16,7 +16,7 @@ if [ "$modo" == "1" ]; then
 elif [ "$modo" == "2" ]; then
     cd src
     if ! ls | grep os-image.bin; then
-        echo "No hay archivo, abortando..."
+        echo "There is no os-image.bin in src, closing..."
         exit -1
 
     else
@@ -26,7 +26,7 @@ elif [ "$modo" == "2" ]; then
     fi
 
 else
-    echo "Hazme caso (-> -_-)->"
+    echo "Wtf bro (-> -_-)->"
     exit -1
 
 fi
