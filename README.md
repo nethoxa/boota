@@ -1,5 +1,5 @@
 # BOOTA
-It's a joke between boot in English and 'bota' in Spanish (which is a type of shoe)... asghdfajsdfgahsdf
+It's a joke between boot in English and 'bota' in Spanish (which is a type of shoe)... Soy español, sí, qué pasa
 
 ## Index
 - [BOOTA](#boota)
