@@ -22,7 +22,9 @@ It's a joke between boot in English and 'bota' in Spanish (which is a type of sh
 - `run` --- use it, really
 
 ## Video
-https://github.com/erebus-eth/boota/assets/135072738/df9effd2-b2ea-46f6-a49f-0aa3e618b928
+https://github.com/nethoxa/boota/assets/135072738/d9774529-1529-4a56-bc6d-c51358a088c5
+
+8b928
 
 ## Comands
 El kernel implementa los siguientes comandos:
