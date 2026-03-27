@@ -4,80 +4,73 @@
 #include "../libc/headers/string.h"
 #include "../libc/headers/mem.h"
 
-// auxiliar
 void dump_mem(uint32_t *esp, uint32_t values) {
     uint32_t i = 0;
 
-	while (i < values) {
-		if ((i) % 4 == 0){
-			char var1[32] = "";
-			hex_to_ascii(esp + i, var1);
-			kprint(var1);
+    while (i < values) {
+        if ((i) % 4 == 0){
+            char var1[32] = "";
+            hex_to_ascii((int)(esp + i), var1);
+            kprint(var1);
 
-			char var2[32] = "";
-			hex_to_ascii(esp[i], var2);
-		    kprint(var2);
-		}
+            char var2[32] = "";
+            hex_to_ascii(esp[i], var2);
+            kprint(var2);
+        }
 
-		if ((i+1) % 4 == 0)
-			kprint("\n");
+        if ((i+1) % 4 == 0)
+            kprint("\n");
 
-		i++;
-	}
+        i++;
+    }
 }
 
 void poweroff(void) {
     port_word_out(0x604, 0x2000);
 }
 
-
 void print_stack(void) {
-	kprint("Mostrando stack...");
-	kprint("\n");
+    kprint("Dumping stack...\n");
     register uint32_t *esp asm("esp");
     dump_mem(esp, 64);
 }
 
 void reboot(void) {
-	kprint("Reiniciando...");
-	kprint("\n");
-	asm volatile ("cli");
-	port_byte_out(0x64, 0xfe);
+    kprint("Rebooting...\n");
+    asm volatile ("cli");
+    port_byte_out(0x64, 0xfe);
 }
 
 void help(void) {
-	kprint("Este es el mensaje de ayuda\n");
-	kprint("Los comandos implementados son:\n");
-	kprint("- HELP -> mostrar este mensaje\n");
-	kprint("- POWEROFF -> apagar el SO\n");
-	kprint("- REBOOT -> reinicio del SO\n");
-	kprint("- HALT -> llamada a halt brusca\n");
-	kprint("- MEM -> reservar una pagina de memoria\n");
-	kprint("- STACK -> mostrar el stack\n");
+    kprint("Available commands:\n");
+    kprint("  HELP     - show this message\n");
+    kprint("  POWEROFF - shut down the system\n");
+    kprint("  REBOOT   - restart the system\n");
+    kprint("  HALT     - halt the CPU\n");
+    kprint("  MEM      - allocate a memory page\n");
+    kprint("  STACK    - dump the stack\n");
 }
 
 void halt(void) {
-	kprint("AAAAAAAAAAAAAAAA");
-	kprint("\n");
-	asm("hlt");
+    kprint("System halted.\n");
+    asm volatile("hlt");
 }
 
 void mem(void) {
-	kprint("Reservando una pagina...\n");
-	uint32_t phys_addr;
-	uint32_t page = kmalloc(1000, 1, &phys_addr);
-	char page_str[16] = "";
-	hex_to_ascii(page, page_str);
-	char phys_str[16] = "";
-	hex_to_ascii(phys_addr, phys_str);
-	kprint("Pagina: ");
-	kprint(page_str);
-	kprint(", memoria fisica: ");
-	kprint(phys_str);
-	kprint("\n");
+    kprint("Allocating a page...\n");
+    uint32_t phys_addr;
+    uint32_t page = kmalloc(1000, 1, &phys_addr);
+    char page_str[16] = "";
+    hex_to_ascii(page, page_str);
+    char phys_str[16] = "";
+    hex_to_ascii(phys_addr, phys_str);
+    kprint("Page: ");
+    kprint(page_str);
+    kprint(", physical: ");
+    kprint(phys_str);
+    kprint("\n");
 }
 
 void terminal(void) {
-	kprint("\n");
-	kprint("[TERMINAL] >>> ");
+    kprint("\n[BOOTA] >>> ");
 }

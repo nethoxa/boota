@@ -8,16 +8,16 @@
 #include <stdint.h>
 
 void kernel_main() {
+    init_memory();
     isr_install();
     irq_install();
 
-    asm("int $2");
-    asm("int $3");
+    asm volatile("int $2");
+    asm volatile("int $3");
     kprint("\n");
-    kprint("Buenos dias");
+    kprint("Welcome to BOOTA");
     kprint("\n");
     help();
-    kprint("\n");
     terminal();
 }
 
@@ -27,7 +27,7 @@ void user_input(char *input) {
 
     } else if (strcmp(input, "STACK") == 0) {
         print_stack();
-        
+
     } else if (strcmp(input, "REBOOT") == 0) {
         reboot();
     } else if (strcmp(input, "HELP") == 0) {
@@ -37,7 +37,7 @@ void user_input(char *input) {
     } else if (strcmp(input, "MEM") == 0) {
         mem();
     } else {
-        kprint("No te entiendo, has dicho ");
+        kprint("Unknown command: ");
         kprint(input);
         kprint("\n");
     }

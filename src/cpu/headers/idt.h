@@ -6,7 +6,7 @@
 #define KERNEL_CS 0x08
 #define IDT_ENTRIES 256
 
-// abstracción gestores de interrupciones
+/* Interrupt gate descriptor */
 typedef struct {
     uint16_t low_offset; 
     uint16_t sel; 
@@ -15,7 +15,7 @@ typedef struct {
     uint16_t high_offset;
 } __attribute__((packed)) idt_gate_t ;
 
-// lista de gestores
+/* IDT register for LIDT */
 typedef struct {
     uint16_t limit;
     uint32_t base;

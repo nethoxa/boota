@@ -1,0 +1,6 @@
+.git
+video
+*.bin
+*.o
+*.elf
+*.dis

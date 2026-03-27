@@ -1,0 +1,9 @@
+# Build artifacts
+*.o
+*.bin
+*.elf
+*.dis
+
+# OS image
+src/os-image.bin
+src/kernel.bin

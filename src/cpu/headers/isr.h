@@ -73,7 +73,7 @@ extern void irq15();
 #define IRQ14 46
 #define IRQ15 47
 
-// asbtracción de los registros
+/* CPU register state pushed by ISR/IRQ stubs */
 typedef struct {
    uint32_t ds; 
    uint32_t edi, esi, ebp, useless, ebx, edx, ecx, eax; 

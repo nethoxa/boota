@@ -3,17 +3,17 @@ disk_load:
     push dx
 
     mov ah, 0x02            ; read
-    mov al, dh              ; num de sectores
-    mov cl, 0x02            ; sector actual, el 1 es el bootloader
-    
-    mov ch, 0x00            ; cilindro
-    mov dh, 0x00            ; cabeza
+    mov al, dh              ; number of sectors
+    mov cl, 0x02            ; current sector (1 is the bootloader)
 
-    int 0x13      
-    jc disk_error 
+    mov ch, 0x00            ; cylinder
+    mov dh, 0x00            ; head
+
+    int 0x13
+    jc disk_error
 
     pop dx
-    cmp al, dh              ; BIOS pone en al el número de sectores leídos
+    cmp al, dh              ; BIOS sets al to the number of sectors read
     jne sectors_error
 
     popa
@@ -25,7 +25,7 @@ disk_error:
     call print_rm
     call print_rm_carry
 
-    mov dh, ah 
+    mov dh, ah
     call print_rm_hex
     jmp disk_loop
 
@@ -36,5 +36,5 @@ sectors_error:
 disk_loop:
     jmp $
 
-DISK_ERROR: db "Error al leer de disco", 0
-SECTORS_ERROR: db "Numero incorrecto de sectores leidos", 0
+DISK_ERROR: db "Disk read error", 0
+SECTORS_ERROR: db "Incorrect number of sectors read", 0

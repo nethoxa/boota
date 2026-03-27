@@ -45,7 +45,7 @@ void isr_install() {
     set_idt_gate(30, (uint32_t)isr30);
     set_idt_gate(31, (uint32_t)isr31);
 
-    // PIC
+    /* Remap the PIC */
     port_byte_out(0x20, 0x11);
     port_byte_out(0xA0, 0x11);
     port_byte_out(0x21, 0x20);
@@ -55,9 +55,9 @@ void isr_install() {
     port_byte_out(0x21, 0x01);
     port_byte_out(0xA1, 0x01);
     port_byte_out(0x21, 0x0);
-    port_byte_out(0xA1, 0x0); 
+    port_byte_out(0xA1, 0x0);
 
-    // IRQs
+    /* Install IRQs */
     set_idt_gate(32, (uint32_t)irq0);
     set_idt_gate(33, (uint32_t)irq1);
     set_idt_gate(34, (uint32_t)irq2);
@@ -75,10 +75,9 @@ void isr_install() {
     set_idt_gate(46, (uint32_t)irq14);
     set_idt_gate(47, (uint32_t)irq15);
 
-    set_idt(); // Load with ASM
+    set_idt();
 }
 
-/* To print the message which defines every exception */
 char *exception_messages[] = {
     "Division By Zero",
     "Debug",
@@ -117,9 +116,49 @@ char *exception_messages[] = {
     "Reserved"
 };
 
+void kernel_panic(registers_t *r) {
+    kprint("\n=== KERNEL PANIC ===\n");
+    kprint("Exception: ");
+    kprint(exception_messages[r->int_no]);
+    kprint("\nInterrupt: ");
+    char s[12];
+    int_to_ascii(r->int_no, s);
+    kprint(s);
+    kprint("  Error code: ");
+    char e[12];
+    int_to_ascii(r->err_code, e);
+    kprint(e);
+    kprint("\nSystem halted.\n");
+    asm volatile("cli");
+    for (;;) {
+        asm volatile("hlt");
+    }
+}
+
+static int is_fatal_exception(uint32_t int_no) {
+    switch (int_no) {
+        case 0:  /* Division By Zero */
+        case 6:  /* Invalid Opcode */
+        case 8:  /* Double Fault */
+        case 10: /* Bad TSS */
+        case 11: /* Segment Not Present */
+        case 12: /* Stack Fault */
+        case 13: /* General Protection Fault */
+        case 14: /* Page Fault */
+        case 18: /* Machine Check */
+            return 1;
+        default:
+            return 0;
+    }
+}
+
 void isr_handler(registers_t *r) {
+    if (is_fatal_exception(r->int_no)) {
+        kernel_panic(r);
+    }
+
     kprint("received interrupt: ");
-    char s[3];
+    char s[12];
     int_to_ascii(r->int_no, s);
     kprint(s);
     kprint("\n");
@@ -144,9 +183,9 @@ void irq_handler(registers_t *r) {
 }
 
 void irq_install() {
-    /* Enable interruptions */
+    /* Enable interrupts */
     asm volatile("sti");
-    
+
     /* IRQ0: timer */
     init_timer(50);
     /* IRQ1: keyboard */

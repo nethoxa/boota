@@ -1,7 +1,8 @@
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
 HEADERS = $(wildcard kernel/headers/*.h drivers/headers/*.h cpu/headers/*.h libc/headers/*.h)
-OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o} 
-CC = /home/kali/Escritorio/gccko/bin/i386-elf-gcc
+OBJ = ${C_SOURCES:.c=.o} cpu/interrupt.o
+CC = i386-elf-gcc
+LD = i386-elf-ld
 CFLAGS = -ffreestanding -Wall -Wextra -fno-exceptions -m32
 
 
@@ -9,7 +10,7 @@ os-image.bin: boot/bootsect.bin kernel.bin
 	cat $^ > os-image.bin
 
 kernel.bin: boot/kernel_entry.o ${OBJ}
-	i386-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
+	$(LD) -o $@ -T linker.ld $^ --oformat binary
 
 
 run: os-image.bin

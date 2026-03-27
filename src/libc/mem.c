@@ -1,6 +1,16 @@
 #include "headers/mem.h"
 
-uint32_t free_mem_addr = 0x10000;
+extern uint8_t _kernel_end[];
+
+uint32_t free_mem_addr = 0;
+
+void init_memory(void) {
+    free_mem_addr = (uint32_t)_kernel_end;
+    /* Page-align upward */
+    if (free_mem_addr & 0xFFF) {
+        free_mem_addr = (free_mem_addr & 0xFFFFF000) + 0x1000;
+    }
+}
 
 void memory_copy(uint8_t *source, uint8_t *dest, int nbytes) {
     int i;
@@ -14,14 +24,13 @@ void memory_set(uint8_t *dest, uint8_t val, uint32_t len) {
     for ( ; len != 0; len--) *temp++ = val;
 }
 
-// pseudo kmalloc ~~
 uint32_t kmalloc(size_t size, int align, uint32_t *phys_addr) {
-    // páginas alineadas
-    if (align == 1 && (free_mem_addr & 0xFFFFF000)) {
+    /* Page-align if requested */
+    if (align == 1 && (free_mem_addr & 0xFFF)) {
         free_mem_addr &= 0xFFFFF000;
         free_mem_addr += 0x1000;
     }
- 
+
     if (phys_addr) *phys_addr = free_mem_addr;
 
     uint32_t ret = free_mem_addr;
