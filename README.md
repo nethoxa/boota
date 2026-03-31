@@ -1,5 +1,7 @@
 # BOOTA
 
+**NOTE**: this was wrote in 2023 during my second year at collegue, the new commits are updates to the README mostly to make it more *"pretty"* for ppl that does not know me (you)
+
 An x86 32-bit kernel and bootloader written from scratch in NASM assembly and C.
 
 > The name comes from the English *boot* and Spanish *bota* (a shoe) -- I'm stupid nvm me.
